@@ -23,6 +23,12 @@ static struct my_obj *foo_obj;
 
 
 static ssize_t foo_show(struct foo)
+{
+
+
+}
+
+
 
 
 
