@@ -1,5 +1,5 @@
 
-obj-m := task2.o
+obj-m := task3.o
 #obj-m := t.o
 #hello_n3.o proc_seq_example1.o
 #obj-m := kobject_example1.o 

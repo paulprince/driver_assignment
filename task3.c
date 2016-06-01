@@ -17,11 +17,42 @@ struct my_obj
 static struct kset *my_kset;
 static struct my_obj *foo_obj;
 
-o
-static ssize_t foo_show(struct foo)
+
+struct my_attribute 
 {
+	struct attribute attr;
+	ssize_t (*show)(struct my_obj *foo, struct my_attribute *attr, char *buf);
+	ssize_t (*show)(struct my_obj *foo, struct my_attrivute*attr, const char *buf,size_t count);
+};
+
+
+static ssize_t my_attr_show(struct kobject *kobj, struct attibute *attr, char *buf)
+{
+	struct my_foo_attribute *attribute;
+	struct my_obj *foo;
+	
+	attribute = to_my_attr(attr);
+	foo = to_my_attr(kobj);
+
+	if(!attribute->show)
+		return -EIO;
+
+	return attribute->show(foo, attribute, buf);
 }
 
+static ssize_t my_attr_store(struct kobject *kobj, struct sttribute *attr, const char *buf, size_t len)
+{
+	struct my_foo_attribute *attribute;
+	struct my_obj *foo;
+	
+	attribute = to_my_attr(attr);
+	foo = to_my_attr(kobj);
+	
+	if(!attribute->store)
+		return -EIO;
+
+	return attribute->store(foo, attribute, buf, len);
+}
 
 
 static ssize_t foo_attribute foo_attribute = __ATTR(dev_param1, 0666, foo_show, foo_store);
@@ -99,5 +130,5 @@ foo_error:
 
 module_init(task_init);
 module_exit(task_exit);
-MODULE_LICENSE("GPL v2");
+MODULE_LICENSE("GPL v3");
 MODULE_AUTHOR ("Paul Prince <paulprince_r@live.com>");
