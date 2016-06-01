@@ -3,7 +3,7 @@
 #include <linux/sysfs.h>
 #include <linux/module.h>
 #include <linux/init.h>
-#include <lnux/slab.h>
+#include <linux/slab.h>
 
 #define to_my_obj(x) container_of(x, struct my_obj, kobj)
 #define to_my_attr(x) container_of(x, struct my_attribute, attr)
@@ -22,7 +22,7 @@ struct my_attribute
 {
 	struct attribute attr;
 	ssize_t (*show)(struct my_obj *foo, struct my_attribute *attr, char *buf);
-	ssize_t (*show)(struct my_obj *foo, struct my_attrivute*attr, const char *buf,size_t count);
+	ssize_t (*store)(struct my_obj *foo, struct my_attribute *attr, const char *buf,size_t count);
 };
 
 
@@ -55,7 +55,7 @@ static ssize_t my_attr_store(struct kobject *kobj, struct sttribute *attr, const
 }
 
 
-static ssize_t foo_attribute foo_attribute = __ATTR(dev_param1, 0666, foo_show, foo_store);
+static struct ssize_t foo_attribute foo_attribute = __ATTR(dev_param1, 0666, foo_show, foo_store);
 
 
 
@@ -73,12 +73,12 @@ static void my_release(struct kobject *kobj)
 }
 
 static struct attribute *my_default_attrs[] = {
-	&foo.attribute.attr,
+	&foo_attribute.attr,
 	NULL,
 };
 
 static struct kobj_type my_ktype = {
-	.sysfs_ops = &my_sys_ops,
+	.sysfs_ops = &my_sysfs_ops,  
 	.release = my_release,
 	.default_attrs = my_default_attrs,
 };
@@ -104,9 +104,9 @@ static struct my_obj *create_my_obj(const char *name)
 	return obj;
 }
 
-static void __exit task_exit(void)
-{
-
+static void __exit task_exit(struct my_obj *foo)
+{	
+	kobject_put(&foo->kobj);
 }
 
 static int __init task_init(void)
@@ -120,7 +120,6 @@ static int __init task_init(void)
 	foo_obj = create_my_obj("dev0");
 	if(!foo_obj)
 		goto foo_error;
-
 
 	return 0;
 
