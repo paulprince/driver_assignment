@@ -30,9 +30,6 @@ static ssize_t foo_show(struct foo)
 
 
 
-
-
-
 static ssize_t foo_attribute foo_attribute = __ATTR(dev_param1, 0666, foo_show, foo_store);
 
 
