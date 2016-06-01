@@ -17,7 +17,7 @@ struct my_obj
 static struct kset *my_kset;
 static struct my_obj *foo_obj;
 
-
+o
 static ssize_t foo_show(struct foo)
 {
 }
