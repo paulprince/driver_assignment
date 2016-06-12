@@ -1,6 +1,9 @@
 # Pdf files
 *.pdf
 
+# txt files
+*.txt
+
 # Object files
 *.o
 *.ko
